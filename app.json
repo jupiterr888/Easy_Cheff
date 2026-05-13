@@ -45,7 +45,13 @@
       "router": {},
       "eas": {
         "projectId": "8d719107-40eb-4637-a367-a1b6b8ba1d06"
-      }
+      },
+      "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyAogS3Ayu0zTYM9rEHHGfCFLNaU372PXII",
+      "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "easych-11cd3.firebaseapp.com",
+      "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "easych-11cd3",
+      "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "easych-11cd3.firebasestorage.app",
+      "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "110366611602",
+      "EXPO_PUBLIC_FIREBASE_APP_ID": "1:110366611602:web:f90665f4eebbe4832d6e4b"
     }
   }
 }

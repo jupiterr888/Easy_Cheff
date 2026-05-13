@@ -3,18 +3,25 @@ import { initializeApp } from 'firebase/app';
 import { getReactNativePersistence, initializeAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
+import Constants from 'expo-constants';
 
 console.log('[Firebase] Initializing Firebase configuration...');
 
-// configuratia - variabile de mediu pentru securitate
-const firebase = {
-  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID
+// Get Firebase config from app.json extra or environment variables
+const getFirebaseConfig = () => {
+  const extra = Constants.expoConfig?.extra || {};
+  
+  return {
+    apiKey: extra.EXPO_PUBLIC_FIREBASE_API_KEY || process.env.EXPO_PUBLIC_FIREBASE_API_KEY || 'AIzaSyAogS3Ayu0zTYM9rEHHGfCFLNaU372PXII',
+    authDomain: extra.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN || process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN || 'easych-11cd3.firebaseapp.com',
+    projectId: extra.EXPO_PUBLIC_FIREBASE_PROJECT_ID || process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID || 'easych-11cd3',
+    storageBucket: extra.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET || process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET || 'easych-11cd3.firebasestorage.app',
+    messagingSenderId: extra.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '110366611602',
+    appId: extra.EXPO_PUBLIC_FIREBASE_APP_ID || process.env.EXPO_PUBLIC_FIREBASE_APP_ID || '1:110366611602:web:f90665f4eebbe4832d6e4b'
+  };
 };
+
+const firebase = getFirebaseConfig();
 
 console.log('[Firebase] Config values:', {
   apiKey: firebase.apiKey ? 'SET' : 'MISSING',
@@ -25,20 +32,20 @@ console.log('[Firebase] Config values:', {
   appId: firebase.appId ? 'SET' : 'MISSING',
 });
 
-// verifica daca toate variabilele de mediu sunt setate
-const requiredEnvVars = [
-  'EXPO_PUBLIC_FIREBASE_API_KEY',
-  'EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN', 
-  'EXPO_PUBLIC_FIREBASE_PROJECT_ID',
-  'EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET',
-  'EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID',
-  'EXPO_PUBLIC_FIREBASE_APP_ID'
+// verifica daca toate valorile sunt setate
+const requiredFields = [
+  'apiKey',
+  'authDomain', 
+  'projectId',
+  'storageBucket',
+  'messagingSenderId',
+  'appId'
 ];
 
-const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
-if (missingVars.length > 0) {
-  console.error('[Firebase] Missing required environment variables:', missingVars);
-  throw new Error(`Missing required Firebase environment variables: ${missingVars.join(', ')}`);
+const missingFields = requiredFields.filter(field => !firebase[field]);
+if (missingFields.length > 0) {
+  console.error('[Firebase] Missing required Firebase fields:', missingFields);
+  throw new Error(`Missing required Firebase configuration: ${missingFields.join(', ')}`);
 }
 
 // initializeaza firebase
