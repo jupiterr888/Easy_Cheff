@@ -1,0 +1,161 @@
+import { StyleSheet } from 'react-native';
+import Colors from '../../../constants/Colors';
+
+const FRAME_SIZE = 250;
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
+  cameraWrapper: {
+    flex: 1,
+    position: 'relative',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  frame: {
+    width: FRAME_SIZE,
+    height: FRAME_SIZE,
+    borderColor: Colors.border,
+    position: 'relative',
+  },
+  cornerTopLeft: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: 30,
+    height: 30,
+    borderTopWidth: 4,
+    borderLeftWidth: 4,
+    borderColor: Colors.primary,
+    borderTopLeftRadius: 8,
+  },
+  cornerTopRight: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    width: 30,
+    height: 30,
+    borderTopWidth: 4,
+    borderRightWidth: 4,
+    borderColor: Colors.primary,
+    borderTopRightRadius: 8,
+  },
+  cornerBottomLeft: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: 30,
+    height: 30,
+    borderBottomWidth: 4,
+    borderLeftWidth: 4,
+    borderColor: Colors.primary,
+    borderBottomLeftRadius: 8,
+  },
+  cornerBottomRight: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 30,
+    height: 30,
+    borderBottomWidth: 4,
+    borderRightWidth: 4,
+    borderColor: Colors.primary,
+    borderBottomRightRadius: 8,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.background,
+    padding: 20,
+  },
+  infoText: {
+    fontSize: 18,
+    color: Colors.text,
+    textAlign: 'center',
+  },
+  resultContainer: {
+    flexGrow: 1,
+    padding: 20,
+    alignItems: 'center',
+    backgroundColor: Colors.background,
+  },
+  resultTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: Colors.primaryDark,
+    marginBottom: 10,
+  },
+  resultCode: {
+    fontSize: 18,
+    color: Colors.text,
+    marginBottom: 20,
+  },
+  questionText: {
+    fontSize: 16,
+    color: Colors.text,
+    marginBottom: 30,
+    textAlign: 'center',
+  },
+  questionTextResult: {
+    fontSize: 20,
+    color: Colors.text,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  button: {
+    backgroundColor: Colors.primary,
+    paddingVertical: 15,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginBottom: 15,
+    width: '100%',
+    shadowColor: Colors.textDark,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  buttonText: {
+    color: Colors.textLight,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  secondaryButton: {
+    borderColor: Colors.primary,
+    borderWidth: 2,
+    borderRadius: 12,
+    paddingVertical: 15,
+    alignItems: 'center',
+    width: '100%',
+  },
+  secondaryButtonText: {
+    color: Colors.primary,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: Colors.primaryDark,
+    marginTop: 10,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 18,
+    color: Colors.text,
+    textAlign: 'center',
+  },
+  scannerContainer: {
+    padding: 20,
+    alignItems: 'center',
+  },
+});
+
+export default styles;
