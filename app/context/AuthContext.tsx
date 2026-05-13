@@ -16,21 +16,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    // Subscribe to auth state changes
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsAuthenticated(!!user);
-      setUser(user);
-    });
+    console.log('[AuthContext] Setting up auth state listener...');
+    try {
+      // Subscribe to auth state changes
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        console.log('[AuthContext] Auth state changed:', user ? `User: ${user.email}` : 'No user');
+        setIsAuthenticated(!!user);
+        setUser(user);
+      }, (error) => {
+        console.error('[AuthContext] Auth state change error:', error);
+      });
 
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
+      console.log('[AuthContext] Auth state listener set up successfully');
+
+      // Cleanup subscription on unmount
+      return () => {
+        console.log('[AuthContext] Cleaning up auth state listener');
+        unsubscribe();
+      };
+    } catch (error) {
+      console.error('[AuthContext] Error setting up auth state listener:', error);
+    }
   }, []);
 
   const login = () => {
+    console.log('[AuthContext] login called');
     setIsAuthenticated(true);
   };
 
   const logout = () => {
+    console.log('[AuthContext] logout called');
     setIsAuthenticated(false);
   };
 

@@ -14,6 +14,8 @@ import MealPlanProvider from './context/MealPlanContext';
 
 import { useColorScheme } from '@/components/useColorScheme';
 
+console.log('[RootLayout] App starting...');
+
 export {
   // prinde orice erori aruncate de componenta layout
   ErrorBoundary,
@@ -34,18 +36,25 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    if (error) throw error;
+    if (error) {
+      console.error('[RootLayout] Font loading error:', error);
+      throw error;
+    }
   }, [error]);
 
   useEffect(() => {
     if (loaded) {
+      console.log('[RootLayout] Fonts loaded, hiding splash screen');
       SplashScreen.hideAsync();
     }
   }, [loaded]);
 
   if (!loaded) {
+    console.log('[RootLayout] Waiting for fonts to load...');
     return null;
   }
+
+  console.log('[RootLayout] Fonts loaded, rendering AuthProvider');
 
   return (
     <AuthProvider>

@@ -4,6 +4,8 @@ import { getReactNativePersistence, initializeAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
+console.log('[Firebase] Initializing Firebase configuration...');
+
 // configuratia - variabile de mediu pentru securitate
 const firebase = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
@@ -13,6 +15,15 @@ const firebase = {
   messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID
 };
+
+console.log('[Firebase] Config values:', {
+  apiKey: firebase.apiKey ? 'SET' : 'MISSING',
+  authDomain: firebase.authDomain ? 'SET' : 'MISSING',
+  projectId: firebase.projectId ? 'SET' : 'MISSING',
+  storageBucket: firebase.storageBucket ? 'SET' : 'MISSING',
+  messagingSenderId: firebase.messagingSenderId ? 'SET' : 'MISSING',
+  appId: firebase.appId ? 'SET' : 'MISSING',
+});
 
 // verifica daca toate variabilele de mediu sunt setate
 const requiredEnvVars = [
@@ -26,22 +37,35 @@ const requiredEnvVars = [
 
 const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
 if (missingVars.length > 0) {
-  console.error('Missing required environment variables:', missingVars);
+  console.error('[Firebase] Missing required environment variables:', missingVars);
   throw new Error(`Missing required Firebase environment variables: ${missingVars.join(', ')}`);
 }
 
-// initializeaza firebase
-const app = initializeApp(firebase);
+try {
+  // initializeaza firebase
+  console.log('[Firebase] Initializing app...');
+  const app = initializeApp(firebase);
+  console.log('[Firebase] App initialized successfully');
 
-// initializeaza Auth cu React Native persistence
-const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(ReactNativeAsyncStorage)
-});
+  // initializeaza Auth cu React Native persistence
+  console.log('[Firebase] Initializing auth...');
+  const auth = initializeAuth(app, {
+    persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+  });
+  console.log('[Firebase] Auth initialized successfully');
 
-// initializeaza firestore
-const db = getFirestore(app);
+  // initializeaza firestore
+  console.log('[Firebase] Initializing Firestore...');
+  const db = getFirestore(app);
+  console.log('[Firebase] Firestore initialized successfully');
 
-// initializeaza Storage
-const storage = getStorage(app);
+  // initializeaza Storage
+  console.log('[Firebase] Initializing Storage...');
+  const storage = getStorage(app);
+  console.log('[Firebase] Storage initialized successfully');
 
-export { auth, db, storage };
+  export { auth, db, storage };
+} catch (error) {
+  console.error('[Firebase] Initialization error:', error);
+  throw error;
+}
