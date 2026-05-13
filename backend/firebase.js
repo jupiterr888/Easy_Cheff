@@ -41,31 +41,33 @@ if (missingVars.length > 0) {
   throw new Error(`Missing required Firebase environment variables: ${missingVars.join(', ')}`);
 }
 
+// initializeaza firebase
+let auth, db, storage;
+
 try {
-  // initializeaza firebase
   console.log('[Firebase] Initializing app...');
   const app = initializeApp(firebase);
   console.log('[Firebase] App initialized successfully');
 
   // initializeaza Auth cu React Native persistence
   console.log('[Firebase] Initializing auth...');
-  const auth = initializeAuth(app, {
+  auth = initializeAuth(app, {
     persistence: getReactNativePersistence(ReactNativeAsyncStorage)
   });
   console.log('[Firebase] Auth initialized successfully');
 
   // initializeaza firestore
   console.log('[Firebase] Initializing Firestore...');
-  const db = getFirestore(app);
+  db = getFirestore(app);
   console.log('[Firebase] Firestore initialized successfully');
 
   // initializeaza Storage
   console.log('[Firebase] Initializing Storage...');
-  const storage = getStorage(app);
+  storage = getStorage(app);
   console.log('[Firebase] Storage initialized successfully');
-
-  export { auth, db, storage };
 } catch (error) {
   console.error('[Firebase] Initialization error:', error);
   throw error;
 }
+
+export { auth, db, storage };
