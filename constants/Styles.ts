@@ -445,6 +445,11 @@ export const commonStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  adminPanelButtonText: {
+    color: Colors.bar,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   resetButton: {
     backgroundColor: Colors.card,
     padding: 10,

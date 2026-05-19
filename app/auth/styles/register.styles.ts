@@ -109,6 +109,32 @@ export const styles = StyleSheet.create({
       marginTop: 4,
       marginLeft: 4,
     },
+    adminApplyContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 12,
+      marginVertical: 12,
+      paddingHorizontal: 4,
+    },
+    adminCheckbox: {
+      width: 24,
+      height: 24,
+      borderRadius: 4,
+      borderWidth: 2,
+      borderColor: Colors.primary,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: Colors.card,
+    },
+    adminCheckboxChecked: {
+      backgroundColor: Colors.primary,
+      borderColor: Colors.primary,
+    },
+    adminApplyLabel: {
+      fontSize: 14,
+      color: Colors.text,
+      flex: 1,
+    },
   }); 
 
   export default styles;

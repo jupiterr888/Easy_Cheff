@@ -10,6 +10,7 @@ import Colors from '../../constants/Colors';
 import { commonStyles } from '../../constants/Styles';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from '../styles/tabs/profile.styles';
+import { useAuth } from '../../app/context/AuthContext';
 
 // tip pentru istoric schimbare nume
 interface NameChange {
@@ -20,6 +21,7 @@ interface NameChange {
 
 export default function ProfileScreen() {
   const router = useRouter();
+  const { isAdmin } = useAuth();
   // state pentru statistici si date user
   const [recipeCount, setRecipeCount] = useState(0);
   const [ingredientCount, setIngredientCount] = useState(0);
@@ -260,6 +262,14 @@ export default function ProfileScreen() {
               <Ionicons name="pencil" size={16} color={Colors.background} />
             </TouchableOpacity>
           </View>
+
+          {/* Admin badge */}
+          {isAdmin && (
+            <View style={styles.adminBadge}>
+              <Ionicons name="shield-checkmark" size={16} color={Colors.card} />
+              <Text style={styles.adminBadgeText}>Admin</Text>
+            </View>
+          )}
         </View>
 
         {/* modal edit nume */}
@@ -394,8 +404,16 @@ export default function ProfileScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* buton logout */}
+        {/* buton logout si admin panel */}
         <View style={[commonStyles.buttonGroup, { marginTop: -5}]}>  
+          {isAdmin && (
+            <TouchableOpacity 
+              style={[commonStyles.logoutButton, { backgroundColor: Colors.muted, marginBottom: 10 }]} 
+              onPress={() => router.push('/admin-panel')}
+            >
+            <Text style={[commonStyles.adminPanelButtonText, { marginLeft: 8 }]}>Admin Panel</Text>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity style={commonStyles.logoutButton} onPress={handleLogout}>
             <Text style={commonStyles.logoutButtonText}>Log Out</Text>
           </TouchableOpacity>

@@ -130,6 +130,22 @@ export const styles = StyleSheet.create({
       fontSize: 16,
       color: Colors.text,
     },
+    adminBadge: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 6,
+      backgroundColor: Colors.primary,
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+      borderRadius: 20,
+      alignSelf: 'center',
+      marginTop: 8,
+    },
+    adminBadgeText: {
+      fontSize: 12,
+      fontWeight: '600',
+      color: Colors.card,
+    },
 }); 
 
 // Add default export

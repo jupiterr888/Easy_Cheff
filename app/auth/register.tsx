@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../../backend/firebase';
 import { FirebaseError } from 'firebase/app';
@@ -21,12 +22,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './styles/register.styles';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../../backend/firebase';
+import { createAdminRequest } from '../../services/adminService';
 
 export default function RegisterScreen() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [applyForAdmin, setApplyForAdmin] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -89,11 +92,26 @@ export default function RegisterScreen() {
         displayName: name
       });
       // sincronizeaza cu firestore
-      await setDoc(doc(db, 'users', user.uid), { displayName: name }, { merge: true });
+      await setDoc(doc(db, 'users', user.uid), { 
+        displayName: name,
+        isAdmin: false 
+      }, { merge: true });
+
+      // Dacă userul a aplicat pentru admin, creează o cerere
+      if (applyForAdmin) {
+        try {
+          await createAdminRequest(user.uid, name, email);
+        } catch (error) {
+          console.error('Error creating admin request:', error);
+          // Nu-i arăta eroarea, doar log-o - contul a fost creat oricum
+        }
+      }
 
       Alert.alert(
         'Success',
-        'Account created successfully!',
+        applyForAdmin 
+          ? 'Account created successfully! Your admin request has been submitted and is pending review.'
+          : 'Account created successfully!',
         [
           {
             text: 'OK',
@@ -205,6 +223,20 @@ export default function RegisterScreen() {
                     editable={!loading}
                   />
                 </View>
+
+                {/* Checkbox pentru aplicare admin */}
+                <TouchableOpacity 
+                  style={styles.adminApplyContainer}
+                  onPress={() => setApplyForAdmin(!applyForAdmin)}
+                  disabled={loading}
+                >
+                  <View style={[styles.adminCheckbox, applyForAdmin && styles.adminCheckboxChecked]}>
+                    {applyForAdmin && (
+                      <Ionicons name="checkmark" size={16} color={Colors.background} />
+                    )}
+                  </View>
+                  <Text style={styles.adminApplyLabel}>Apply for admin account</Text>
+                </TouchableOpacity>
 
                 {/* butonul de register cu loading state */}
                 <TouchableOpacity
