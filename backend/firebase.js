@@ -49,7 +49,9 @@ if (missingFields.length > 0) {
 }
 
 // initializeaza firebase
-let auth, db, storage;
+let auth;
+let db;
+let storage;
 
 try {
   console.log('[Firebase] Initializing app...');

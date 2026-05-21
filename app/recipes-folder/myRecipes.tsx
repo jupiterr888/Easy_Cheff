@@ -34,9 +34,10 @@ export default function MyRecipesScreen() {
 
     setLoading(true);
     
-    // seteaza listener in timp real pentru retetele utilizatorului
-        const recipesRef = collection(db, 'recipes');
-    const unsubscribe = onSnapshot(recipesRef, (querySnapshot) => {
+    // seteaza listener in timp real pentru retetele utilizatorului (toate, indiferent de status)
+    const recipesRef = collection(db, 'recipes');
+    const userRecipesQuery = query(recipesRef, where('authorId', '==', user?.uid));
+    const unsubscribe = onSnapshot(userRecipesQuery, (querySnapshot) => {
       try {
         const userRecipes = querySnapshot.docs
           .map(doc => {

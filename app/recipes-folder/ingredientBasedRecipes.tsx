@@ -16,7 +16,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { normalizeQuantity } from '../../utils/normalizeQuantity';
 import { auth, db } from '../../backend/firebase';
-import { doc, getDoc, onSnapshot, setDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot, setDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import Colors from '../../constants/Colors';
 import { commonStyles } from '../../constants/Styles';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -225,9 +225,10 @@ export default function IngredientBasedRecipesScreen() {
       if (user) {
         try {
           const recipesRef = collection(db, 'recipes');
-          const recipesSnapshot = await getDocs(recipesRef);
+          const approvedRecipesQuery = query(recipesRef, where('approved', '==', true));
+          const recipesSnapshot = await getDocs(approvedRecipesQuery);
           
-          recipesSnapshot.forEach((doc) => {
+          recipesSnapshot.docs.forEach((doc) => {
             const recipe = doc.data();
             
             const recipeIngredients = recipe.ingredients.map((ing: { name: string }) => 

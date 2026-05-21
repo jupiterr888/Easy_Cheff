@@ -219,8 +219,9 @@ export default function AdminPanelScreen() {
     if (pendingRequests.length === 0) {
       return (
         <View style={styles.emptyContainer}>
-          <Ionicons name="checkmark-circle" size={48} color={Colors.primary} />
+          <Ionicons name="checkmark-circle" size={44} color={Colors.primary} />
           <Text style={styles.emptyTitle}>No Pending Requests</Text>
+          <Text style={styles.emptyText}>All admin requests have been processed</Text>
         </View>
       );
     }
@@ -229,15 +230,22 @@ export default function AdminPanelScreen() {
       <View style={styles.itemsList}>
         {pendingRequests.map((request, index) => (
           <View key={index} style={styles.itemCard}>
-            <Text style={styles.itemTitle}>{request.userName}</Text>
-            <Text style={styles.itemSubtitle}>{request.userEmail}</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.itemTitle}>{request.userName}</Text>
+                <Text style={styles.itemSubtitle}>{request.userEmail}</Text>
+              </View>
+              <View style={{ backgroundColor: Colors.primary + '20', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 6 }}>
+                <Text style={{ fontSize: 9, fontWeight: '600', color: Colors.primary }}>NEW</Text>
+              </View>
+            </View>
             <View style={styles.actionButtons}>
               <TouchableOpacity style={[styles.button, styles.approveButton]} onPress={() => handleApproveRequest(request)} disabled={actionLoading}>
-                <Ionicons name="checkmark" size={14} color={Colors.background} />
+                <Ionicons name="checkmark" size={13} color={Colors.background} />
                 <Text style={styles.buttonText}>Approve</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[styles.button, styles.rejectButton]} onPress={() => handleRejectPress(request)} disabled={actionLoading}>
-                <Ionicons name="close" size={14} color={Colors.background} />
+                <Ionicons name="close" size={13} color={Colors.background} />
                 <Text style={styles.buttonText}>Reject</Text>
               </TouchableOpacity>
             </View>
@@ -251,8 +259,9 @@ export default function AdminPanelScreen() {
     if (unapprovedRecipes.length === 0) {
       return (
         <View style={styles.emptyContainer}>
-          <Ionicons name="checkmark-circle" size={48} color={Colors.primary} />
+          <Ionicons name="checkmark-circle" size={44} color={Colors.primary} />
           <Text style={styles.emptyTitle}>No Pending Recipes</Text>
+          <Text style={styles.emptyText}>All recipe submissions are approved</Text>
         </View>
       );
     }
@@ -261,15 +270,19 @@ export default function AdminPanelScreen() {
       <View style={styles.itemsList}>
         {unapprovedRecipes.map((recipe, index) => (
           <View key={index} style={styles.itemCard}>
-            <Text style={styles.itemTitle}>{recipe.title}</Text>
-            <Text style={styles.itemSubtitle}>{recipe.authorName || 'Unknown'}</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.itemTitle} numberOfLines={1}>{recipe.title}</Text>
+                <Text style={styles.itemSubtitle}>by {recipe.authorName || 'Unknown'}</Text>
+              </View>
+            </View>
             <View style={styles.actionButtons}>
               <TouchableOpacity style={[styles.button, styles.approveButton]} onPress={() => handleApproveRecipe(recipe.id)} disabled={actionLoading}>
-                <Ionicons name="checkmark" size={14} color={Colors.background} />
+                <Ionicons name="checkmark" size={13} color={Colors.background} />
                 <Text style={styles.buttonText}>Approve</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[styles.button, styles.rejectButton]} onPress={() => handleRejectRecipe(recipe.id)} disabled={actionLoading}>
-                <Ionicons name="close" size={14} color={Colors.background} />
+                <Ionicons name="close" size={13} color={Colors.background} />
                 <Text style={styles.buttonText}>Reject</Text>
               </TouchableOpacity>
             </View>
@@ -283,7 +296,9 @@ export default function AdminPanelScreen() {
     if (allUsers.length === 0) {
       return (
         <View style={styles.emptyContainer}>
+          <Ionicons name="people" size={44} color={Colors.primary} />
           <Text style={styles.emptyTitle}>No Users</Text>
+          <Text style={styles.emptyText}>No users in the system</Text>
         </View>
       );
     }
@@ -295,11 +310,24 @@ export default function AdminPanelScreen() {
         keyExtractor={(item) => item.uid}
         renderItem={({ item }) => (
           <View style={styles.itemCard}>
-            <Text style={styles.itemTitle}>{item.displayName}</Text>
-            <Text style={styles.itemSubtitle}>{item.email || 'No email'}</Text>
-            {item.isAdmin && <View style={styles.adminBadge}><Text style={styles.adminBadgeText}>Admin</Text></View>}
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.itemTitle} numberOfLines={1}>{item.displayName}</Text>
+                <Text style={styles.itemSubtitle} numberOfLines={1}>{item.email || 'No email'}</Text>
+              </View>
+              {item.isAdmin && (
+                <View style={styles.adminBadge}>
+                  <Ionicons name="shield-checkmark" size={12} color={Colors.primary} />
+                </View>
+              )}
+            </View>
           </View>
         )}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyTitle}>No Users</Text>
+          </View>
+        }
       />
     );
   };
@@ -308,7 +336,9 @@ export default function AdminPanelScreen() {
     if (allAdmins.length === 0) {
       return (
         <View style={styles.emptyContainer}>
+          <Ionicons name="shield" size={44} color={Colors.primary} />
           <Text style={styles.emptyTitle}>No Admins</Text>
+          <Text style={styles.emptyText}>No administrator accounts</Text>
         </View>
       );
     }
@@ -321,12 +351,21 @@ export default function AdminPanelScreen() {
         renderItem={({ item }) => (
           <View style={styles.itemCard}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <Ionicons name="shield-checkmark" size={16} color={Colors.primary} />
-              <Text style={styles.itemTitle}>{item.displayName}</Text>
+              <View style={{ backgroundColor: Colors.primary + '15', padding: 6, borderRadius: 6 }}>
+                <Ionicons name="shield-checkmark" size={13} color={Colors.primary} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.itemTitle} numberOfLines={1}>{item.displayName}</Text>
+                <Text style={styles.itemSubtitle} numberOfLines={1}>{item.email || 'No email'}</Text>
+              </View>
             </View>
-            <Text style={styles.itemSubtitle}>{item.email || 'No email'}</Text>
           </View>
         )}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyTitle}>No Admins</Text>
+          </View>
+        }
       />
     );
   };
@@ -335,7 +374,9 @@ export default function AdminPanelScreen() {
     if (allUsers.length === 0) {
       return (
         <View style={styles.emptyContainer}>
+          <Ionicons name="bar-chart" size={44} color={Colors.primary} />
           <Text style={styles.emptyTitle}>No Users</Text>
+          <Text style={styles.emptyText}>No user statistics available</Text>
         </View>
       );
     }
@@ -347,13 +388,20 @@ export default function AdminPanelScreen() {
         keyExtractor={(item) => item.uid}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.itemCard} onPress={() => handleSelectUserForStats(item)}>
-            <Text style={styles.itemTitle}>{item.displayName}</Text>
-            <Text style={styles.itemSubtitle}>{item.email || 'No email'}</Text>
-            <View style={{ marginTop: 8 }}>
-              <Ionicons name="chevron-forward" size={16} color={Colors.primary} />
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.itemTitle} numberOfLines={1}>{item.displayName}</Text>
+                <Text style={styles.itemSubtitle} numberOfLines={1}>{item.email || 'No email'}</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={14} color={Colors.primary} />
             </View>
           </TouchableOpacity>
         )}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyTitle}>No Users</Text>
+          </View>
+        }
       />
     );
   };
@@ -390,7 +438,7 @@ export default function AdminPanelScreen() {
       </View>
 
       {/* Content */}
-      <ScrollView style={styles.content} scrollEnabled={false}>
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={true}>
         {renderTabContent()}
       </ScrollView>
 
@@ -418,31 +466,60 @@ export default function AdminPanelScreen() {
         <View style={styles.modalOverlay}>
           <View style={styles.statsModalContent}>
             <View style={styles.statsModalHeader}>
-              <Text style={styles.statsModalTitle}>{selectedUserForStats?.displayName}</Text>
+              <View>
+                <Text style={styles.statsModalTitle}>{selectedUserForStats?.displayName}</Text>
+                <Text style={styles.itemSubtitle}>{selectedUserForStats?.email}</Text>
+              </View>
               <TouchableOpacity onPress={() => setShowStatsModal(false)}>
-                <Ionicons name="close" size={20} color={Colors.text} />
+                <Ionicons name="close" size={18} color={Colors.text} />
               </TouchableOpacity>
             </View>
 
             {userStats && (
-              <View style={styles.statsGrid}>
-                <View style={styles.statBox}>
-                  <Text style={styles.statLabel}>Total Recipes</Text>
-                  <Text style={styles.statNumber}>{userStats.totalRecipes}</Text>
+              <View>
+                <View style={styles.statsGrid}>
+                  <View style={styles.statBox}>
+                    <Ionicons name="document-text" size={16} color={Colors.primary} style={{ marginBottom: 4 }} />
+                    <Text style={styles.statLabel}>Total</Text>
+                    <Text style={styles.statNumber}>{userStats.totalRecipes}</Text>
+                  </View>
+                  <View style={styles.statBox}>
+                    <Ionicons name="checkmark-circle" size={16} color={Colors.success} style={{ marginBottom: 4 }} />
+                    <Text style={styles.statLabel}>Approved</Text>
+                    <Text style={styles.statNumber}>{userStats.approvedRecipes}</Text>
+                  </View>
+                  <View style={styles.statBox}>
+                    <Ionicons name="time" size={16} color={Colors.warning} style={{ marginBottom: 4 }} />
+                    <Text style={styles.statLabel}>Pending</Text>
+                    <Text style={styles.statNumber}>{userStats.pendingRecipes}</Text>
+                  </View>
                 </View>
-                <View style={styles.statBox}>
-                  <Text style={styles.statLabel}>Approved</Text>
-                  <Text style={styles.statNumber}>{userStats.approvedRecipes}</Text>
-                </View>
-                <View style={styles.statBox}>
-                  <Text style={styles.statLabel}>Pending</Text>
-                  <Text style={styles.statNumber}>{userStats.pendingRecipes}</Text>
-                </View>
+
+                {userStats.totalRecipes > 0 && (
+                  <View style={{ marginTop: 12, paddingTop: 10, borderTopWidth: 1, borderTopColor: Colors.border }}>
+                    <Text style={{ fontSize: 12, fontWeight: '600', color: Colors.muted, marginBottom: 6 }}>Approval Rate</Text>
+                    <View style={{ backgroundColor: Colors.card, borderRadius: 8, overflow: 'hidden', height: 6 }}>
+                      <View 
+                        style={{ 
+                          backgroundColor: Colors.success, 
+                          height: '100%',
+                          width: `${(userStats.approvedRecipes / userStats.totalRecipes) * 100}%`
+                        }} 
+                      />
+                    </View>
+                    <Text style={{ fontSize: 11, color: Colors.muted, marginTop: 4 }}>
+                      {((userStats.approvedRecipes / userStats.totalRecipes) * 100).toFixed(0)}% approved
+                    </Text>
+                  </View>
+                )}
               </View>
             )}
 
-            <TouchableOpacity style={[commonStyles.logoutButton, { marginTop: 12 }]} onPress={() => setShowStatsModal(false)}>
-              <Text style={commonStyles.logoutButtonText}>Close</Text>
+            <TouchableOpacity 
+              style={[styles.modalButton, styles.confirmButton, { marginTop: 12 }]} 
+              onPress={() => setShowStatsModal(false)}
+            >
+              <Text style={styles.confirmButtonText}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>

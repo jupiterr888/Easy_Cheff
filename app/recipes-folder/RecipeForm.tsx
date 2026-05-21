@@ -17,7 +17,8 @@ import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
 import { auth, db } from '../../backend/firebase';
-import { collection, addDoc, getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc } from 'firebase/firestore';
+import { createRecipe } from '../../services/recipeService';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack, useRouter } from 'expo-router';
 import StatusBarConfig from '../../components/StatusBarConfig';
@@ -243,12 +244,9 @@ export default function RecipeForm() {
         area,
         imageIndex: selectedImage,
         ...(uploadedImage ? { uploadedImage } : {}),
-        authorId: user.uid,
-        authorName,
-        createdAt: new Date().toISOString(),
       };
       console.log('Saving recipe with data:', recipeData);
-      await addDoc(collection(db, 'recipes'), recipeData);
+      await createRecipe(recipeData);
       Alert.alert('Success', 'Recipe created successfully!');
       router.back();
     } catch (error) {

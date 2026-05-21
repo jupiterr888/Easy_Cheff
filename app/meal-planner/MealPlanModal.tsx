@@ -15,7 +15,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { fetchAllMealDBRecipes, filterMealDBRecipes, MealDBRecipe } from '../../utils/mealdb';
 import { auth, db } from '../../backend/firebase';
-import { doc, getDoc, collection, getDocs, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import Colors from '../../constants/Colors';
 import { useMealPlan } from '../context/MealPlanContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -100,8 +100,9 @@ export default function MealPlanModal({
     try {
       // incarca retetele din API
       const apiRecipes = await fetchAllMealDBRecipes();
-      // seteaza listener in timp real pentru retetele generate de utilizator din firestore
+      // seteaza listener in timp real pentru retetele aprobate din firestore
       const recipesRef = collection(db, 'recipes');
+      const approvedRecipesQuery = query(recipesRef, where('approved', '==', true));
       // creeaza un map pentru a stoca displayName-urile autorilor
       const userDataMap = new Map<string, string>();
       // helper pentru a incarca displayName din firestore
@@ -118,7 +119,7 @@ export default function MealPlanModal({
         return authorId;
       };
       // listener pentru colectia de retete de la utilizatori
-      const unsubscribe = onSnapshot(recipesRef, async (querySnapshot) => {
+      const unsubscribe = onSnapshot(approvedRecipesQuery, async (querySnapshot) => {
         try {
           // proceseaza retetele utilizatorului si colecteaza id-urile unice ale autorilor
           const userRecipes = await Promise.all(querySnapshot.docs.map(async (docSnapshot) => {

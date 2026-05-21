@@ -81,8 +81,9 @@ export default function RecipesListScreen() {
       // incarca toate retetele din TheMealDB API
       const apiRecipes = await fetchAllMealDBRecipes();
 
-      // seteaza listener in timp real pentru retetele generate de utilizator din firestore
+      // seteaza listener in timp real pentru retetele aprobate din firestore
       const recipesRef = collection(db, 'recipes');
+      const approvedRecipesQuery = query(recipesRef, where('approved', '==', true));
       
       // creeaza un map pentru a stoca datele utilizatorului
       const userDataMap = new Map<string, string>();
@@ -101,10 +102,10 @@ export default function RecipesListScreen() {
         return authorId;
       };
 
-      // seteaza listener in timp real
-      const unsubscribe = onSnapshot(recipesRef, async (querySnapshot) => {
+      // seteaza listener in timp real pentru retetele aprobate
+      const unsubscribe = onSnapshot(approvedRecipesQuery, async (querySnapshot) => {
         try {
-      // proceseaza retetele utilizatorului si colecteaza id-urile unice pt autor
+      // proceseaza retetele aprobate si colecteaza id-urile unice pt autor
       const userRecipes = await Promise.all(querySnapshot.docs.map(async (docSnapshot) => {
         const data = docSnapshot.data();
         const authorId = data.authorId as string;
@@ -128,7 +129,7 @@ export default function RecipesListScreen() {
         };
       }));
 
-      // combina retetele din api si ale utilizatorului, apoi sorteaza alfabetic
+      // combina retetele din api si ale utilizatorului aprobate, apoi sorteaza alfabetic
       const allRecipes = [...apiRecipes, ...userRecipes].sort((a, b) => a.title.localeCompare(b.title));
       setRecipes(allRecipes);
       setFilteredRecipes(allRecipes);
